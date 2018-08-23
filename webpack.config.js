@@ -10,6 +10,25 @@ module.exports = {
     path: path.resolve(__dirname, 'build'),
     filename: '[name].[hash:8].js'
   },
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+            plugins: [
+              ['@babel/plugin-proposal-decorators', {'legacy': true}],
+              ['transform-class-properties'],
+              ['transform-react-jsx']
+            ]
+          }
+        }
+      }
+    ]
+  },
   plugins: [
     new CleanWebpackPlugin(['build']),
     new HtmlWebpackPlugin({
