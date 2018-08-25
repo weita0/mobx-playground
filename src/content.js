@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { store, handleAdd } from './redux-example'
-import axios from 'axios'
+import content from './mobx-share.md'
 
 export default class Content extends React.Component {
   componentDidMount () {
@@ -10,7 +10,7 @@ export default class Content extends React.Component {
   render () {
     return (
       <div id='content'>
-        
+        <div dangerouslySetInnerHTML={{__html: content}}></div>
       </div>
     )
   }

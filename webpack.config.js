@@ -1,4 +1,5 @@
 const path = require('path')
+const webpack = require('webpack')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
@@ -25,7 +26,7 @@ module.exports = {
               ['transform-react-jsx']
             ]
           }
-        }
+        },
       },
       {
         test: /\.css$/,
@@ -49,6 +50,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'MobX',
       template: './index.html'
+    }),
+    new webpack.ProvidePlugin({
+      '_': 'lodash'
     })
   ],
   devServer: {

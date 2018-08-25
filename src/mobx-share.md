@@ -1,6 +1,8 @@
 # MobX 分享
 
-## Preparation
+---
+
+## [Preparation](#preparation)
 
 ### Install
 
@@ -14,28 +16,27 @@ npm install mobx-react --save
 - babel-plugin-transform-react-jsx
 
 ```javascript
-{
-  module: {
-    rules: [{
-      test: /\.(js|jsx)$/,
-      use: {
-        loader: 'babel-loader',
-        exclude: /node_modules/,
-        options: {
-          presets: ['@babel/preset-env'],
-          plugins: [
-            ['@babel/plugin-proposal-decorators', {'legacy': true}],
-            ['transform-class-properties'],
-            ['transform-react-jsx']
-          ]
-        }
-      }
-    }]
+// webpack.config.js fragment
+rules: [
+  test: /\.(js|jsx)$/,
+  use: {
+    loader: 'babel-loader',
+    exclude: /node_modules/,
+    options: {
+      presets: ['@babel/preset-env'],
+      plugins: [
+        ['@babel/plugin-proposal-decorators', {'legacy': true}],
+        ['transform-class-properties'],
+        ['transform-react-jsx']
+      ]
+    }
   }
-}
+]
 ```
 
-## Introduction
+---
+
+## [Introduction](#introduction)
 
 ### Version
 
@@ -51,16 +52,69 @@ any ES5 browser, api's are the same, but has some limitations
 
 Anything that can be derived from the application state, should be derived. **Automatically**
 
-### Flow
+## [Core Conceptions](#core-conceptions)
 
-![flow graph](https://mobx.js.org/docs/flow.png)
+### State(状态)
 
-![another fg](https://mobx.js.org/getting-started-assets/overview.png)
+驱动应用的数据
 
-## Core Conceoptions
+### Derivation(衍生)
 
-### Observable state
+任何**源自**状态且不会有任何进一步相互作用的东西，都是衍生，它们可以是
 
-### Computed values
+- UI
+- Derived Data(衍生数据)
+- Backend Integrations(后端集成)
 
-### Reactions
+MobX把这些衍生分为两种：
+
+1. Computed values: 使用纯函数从当前可观察状态中衍生出的值
+
+2. Reaction: 当状态改变时需要**自动**发生的副作用
+
+### Action
+
+任何一段改变状态的代码
+
+<img src="https://mobx.js.org/getting-started-assets/overview.png" height="400px" />
+
+<img src="https://mobx.js.org/docs/flow.png" width="800px" />
+
+---
+
+## API
+
+### @observable
+
+可以在实例字段和属性getter上使用，对于对象的哪部分需要成为客观察的(observable)，@observable提供了细粒度的支持。
+
+```javascript
+import { observable } from 'mobx'
+
+class Todo {
+  id: Math.random()
+  @observable title = ''
+  @observable finished = false
+}
+```
+
+### @computed
+
+Computed values(计算值)是可以根据现有的状态或其它计算值衍生出的值。
+
+```javascript
+class TodoList {
+  @observable todos: []
+  @computed get unfinished () {
+    return this.todos.filter(todo => !todo.finished).length
+  }
+}
+```
+
+### autorun
+
+当你想创建一个响应式函数，而这个函数本身不会有任何观察者(observer)时，可以用到
+
+比如打印log，重绘UI，持久化等操作
+
+### @reaction
