@@ -1,99 +1,46 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { observer } from 'mobx-react'
-import { observable, computed, autorun } from 'mobx'
+import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
+import Content from './content'
+import SessionOne from './session_one'
+import SessionTwo from './session_two'
+import SessionThree from './session_three'
+import Timer from './timer'
+import './index.css'
+const supportsHistory = 'pushState' in window.history
 
-class Todo {
-  id = Math.random()
-  @observable title = ''
-  @observable finished = false
-}
-
-class TodoStore {
-  todos = []
-  get completedTodosCount () {
-    return this.todos.filter(todo => todo.completed).length
-  }
-  report () {
-    if (this.todos.length === 0) {
-      return '<none>'
-    }
-    return `Next todo: "${this.todos[0].task}".\nProgress: ${this.completedTodosCount}/${this.todos.length}`
-  }
-  addTodo (task) {
-    this.todos.push({
-      id: Math.random(),
-      task: task,
-      completed: false,
-      assignee: null
-    })
-  }
-}
-
-const todoStore = new TodoStore()
-
-todoStore.addTodo('leave the seat')
-todoStore.addTodo('wait the elevator')
-todoStore.addTodo('walk to Starbucks')
-todoStore.addTodo('buy a coffee')
-
-console.log(todoStore.report())
-
-class TodoList {
-  @observable todos = []
-  @computed get unfinishedTodoCount () {
-    return this.todos.filter(todo => !todo.finished).length
-  }
-}
-
-// const list = new TodoList()
-
-// list.todos.push(new Todo({
-//   title: 'fist task'
-// }))
-
-@observer
-class TodoListView extends React.Component {
-  render () {
-    return (
-      <div>
-        <ul>
-          {
-            this.props.todoList.todos.map(todo => 
-              <TodoView todo={todo} key={todo.id} />
-            )
-          }
-        </ul>
+const Navigator = ({props}) => (
+  <Router
+    forceRefresh={!supportsHistory}
+  >
+    <div>
+      <ul className='navigator'>
+        <li>
+          <Link to='/'>Content</Link>
+        </li>
+        <li>
+          <Link to='/session1'>Session 1</Link>
+        </li>
+        <li>
+          <Link to='/session2'>Session 2</Link>
+        </li>
+        <li>
+          <Link to='/session3'>Session 3</Link>
+        </li>
+      </ul>
+      <div className='content-area'>
+        {/* <Redirect from='/*' to='/' /> */}
+        <Route exact path='/' component={Content} />
+        <Route path='/session1' component={SessionOne} />
+        <Route path='/session2' component={SessionTwo} />
+        <Route path='/session3' component={SessionThree} />
+        <Route path='/timer' component={Timer} />
       </div>
-    )
-  }
-}
-
-const TodoView = observer(({todo}) => {
-  console.log('todo >>', todo)
-  return <li>
-    <input 
-      type="checkbox"
-      checked={todo.finished}
-      onClick={() => todo.finished = !todo.finished}
-    /><span>{todo.title || 'nothing'}</span>
-  </li>
-})
-
-const store = new TodoList()
-
-// autorun(() => {
-//   console.log('Task left: ' + store.unfinishedTodoCount)
-// })
-
-setTimeout(() => {
-  store.todos.push(
-    new Todo({title: 'Buy Coffee'})
-    // new Todo({title: 'Drink coffee'})
-  )
-}, 1000)
+    </div>
+  </Router>
+)
 
 ReactDOM.render(
-  <TodoListView todoList={store} />,
+  <Navigator />,
   document.getElementById('root')
 )

@@ -8,7 +8,7 @@ module.exports = {
   entry: path.resolve(__dirname, 'src/index.js'),
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: '[name].[hash:8].js'
+    filename: 'bundle.js'
   },
   module: {
     rules: [
@@ -26,6 +26,21 @@ module.exports = {
             ]
           }
         }
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.md$/,
+        use: [
+          {
+            loader: 'html-loader'
+          },
+          {
+            loader: 'markdown-loader'
+          }
+        ]
       }
     ]
   },
@@ -35,5 +50,10 @@ module.exports = {
       title: 'MobX',
       template: './index.html'
     })
-  ]
+  ],
+  devServer: {
+    contentBase: path.join(__dirname, 'src'),
+    port: 3000,
+    historyApiFallback: true
+  }
 }

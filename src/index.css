@@ -1,0 +1,29 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+#root {
+  font: 16px Helvetica,Arial,sans-serif;
+}
+#root ul.navigator {
+  margin: 0;
+  list-style: none;  
+  /* font-size: 16px; */
+  background: #545652;
+  padding: 0 16px;
+  line-height: 1.5;
+}
+#root .navigator li {
+  display: inline-block;
+  text-decoration: none;
+  margin: 0 16px;
+}
+
+#root .navigator li a {
+  color: #d5d5d5;
+  text-decoration: none;
+}
+
+#root .content-area {
+  padding: 32px;
+}
