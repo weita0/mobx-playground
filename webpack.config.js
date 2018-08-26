@@ -4,12 +4,15 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-  devtool: 'inline-souce-map',
+  devtool: 'souce-map',
   mode: 'development',
-  entry: path.resolve(__dirname, 'src/index.js'),
+  entry: {
+    main: path.resolve(__dirname, 'src/index.js'),
+    redux_app: path.resolve(__dirname, 'src/redux-app/index.js')
+  },
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'bundle.js'
+    filename: '[name].bundle.js'
   },
   module: {
     rules: [

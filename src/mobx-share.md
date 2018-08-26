@@ -48,6 +48,10 @@ MobX 4
 
 any ES5 browser, api's are the same, but has some limitations
 
+### What is MobX
+
+> MobX is a battle tested library that makes state management simple and scalable by transparently applying functional reactive programming (TFRP)
+
 ### Philosophy
 
 Anything that can be derived from the application state, should be derived. **Automatically**
@@ -82,7 +86,7 @@ MobX把这些衍生分为两种：
 
 ---
 
-## API
+## 主要API
 
 ### @observable
 
@@ -118,3 +122,11 @@ class TodoList {
 比如打印log，重绘UI，持久化等操作
 
 ### @reaction
+
+## 和Redux的异同
+
+Advantages:
+
+1. 少了很多模版代码，自由度更高
+
+Disadvantages:

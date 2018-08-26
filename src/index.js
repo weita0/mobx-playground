@@ -9,6 +9,8 @@ import Timer from './timer'
 import TodoStore from './todoStore'
 import './index.css'
 import Test from './test'
+import ReduxApp from './redux-app'
+import MobXApp from './mobx-app'
 const supportsHistory = 'pushState' in window.history
 
 const Navigator = () => (
@@ -29,6 +31,12 @@ const Navigator = () => (
         <li>
           <Link to='/session3'>示例三</Link>
         </li>
+        <li>
+          <Link to='/reduxapp'>Redux Version</Link>
+        </li>
+        <li>
+          <Link to='/mobxapp'>MobX Version</Link>
+        </li>
       </ul>
       <div className='content-area'>
         {/* <Redirect from='/*' to='/' /> */}
@@ -38,6 +46,8 @@ const Navigator = () => (
         <Route path='/session3' component={SessionThree} />
         <Route path='/timer' component={Timer} />
         <Route path='/test' component={Test} />
+        <Route path='/reduxapp' component={ReduxApp} />
+        <Route path='/mobxapp' component={MobXApp} />
       </div>
     </div>
   </Router>
