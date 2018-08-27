@@ -50,7 +50,7 @@ any ES5 browser, api's are the same, but has some limitations
 
 ### What is MobX
 
-> MobX is a battle tested library that makes state management simple and scalable by transparently applying functional reactive programming (TFRP)
+> MobX is a simple, scalable and battle tested **state management** solusion.
 
 ### Philosophy
 
@@ -66,19 +66,22 @@ Anything that can be derived from the application state, should be derived. **Au
 
 任何**源自**状态且不会有任何进一步相互作用的东西，都是衍生，它们可以是
 
-- UI
 - Derived Data(衍生数据)
-- Backend Integrations(后端集成)
+- UI rendering
+- Networking
+- I/O
+- Serialization
 
 MobX把这些衍生分为两种：
 
 1. Computed values: 使用纯函数从当前可观察状态中衍生出的值
-
-2. Reaction: 当状态改变时需要**自动**发生的副作用
+2. Reaction: 当状态改变时需要**自动**发生的副作用，比如IO操作，网络请求，DOM更新，Reaction不产生值
 
 ### Action
 
-任何一段改变状态的代码
+Actions are all the things that alter the state.
+
+任何一段改变状态的代码即Action
 
 <img src="https://mobx.js.org/getting-started-assets/overview.png" height="400px" />
 
@@ -121,12 +124,8 @@ class TodoList {
 
 比如打印log，重绘UI，持久化等操作
 
-### @reaction
+## 注意事项
 
-## 和Redux的异同
+### Array.isArray(observable([1, 2, 3])) === false
 
-Advantages:
-
-1. 少了很多模版代码，自由度更高
-
-Disadvantages:
+toJS() 或 slice() 转成普通数组

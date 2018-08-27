@@ -1,73 +1,57 @@
 import React from 'react'
-import { observable, computed, autorun } from 'mobx'
+import { observable, computed, autorun, toJS } from 'mobx'
+import { observer } from 'mobx-react'
 
-export class ObservableTodoStore {
-  @observable todos = [];
+class Todo {
+  @observable title
+  @observable finished
+  id 
 
-  constructor () {
-    autorun(() => console.log(this.report)) 
+  constructor (title, finished=false, id=_.uniqueId()) {
+    this.title = title
+    this.finished = finished
+    this.id = id
   }
-	@computed get completedTodosCount() {
-    return this.todos.filter(todo => todo.completed === true).length;
-  }
-
-	@computed get report() {
-		if (this.todos.length === 0)
-			return '试试添加一个任务';
-		return `Next todo: "${this.todos[0].task}". ` +
-			`Progress: ${this.completedTodosCount}/${this.todos.length}`;
-	}
-
-  addTodo(task) {
-    this.todos.push({
-      id: parseInt(Math.random() * 1000),
-      task: task,
-      completed: false,
-      assignee: null
-    });
-	}
 }
 
-const todoStore = new ObservableTodoStore()
+// const todo = new Todo('wake up')
+const todo = new Todo('wake up')
 
-export default class SessionOne extends React.Component {
-  state = {
-    inputValue: ''
-  }
+@observer
+export default class SessionTwo extends React.Component {
   componentDidMount () {
-    document.getElementById('task-input').addEventListener('keydown', e => {
-      if (e.which === 13) { // enter
-        if (this.state.inputValue) {
-          todoStore.addTodo(this.state.inputValue)
-          this.setState({
-            inputValue: ''
-          })
-        }
-      }
+    setTimeout(() => {
+      todo.title = 'go to sleep'
+    }, 3000)
+    autorun(() => {
+      localStorage.setItem('todo', JSON.stringify(toJS(todo)))
     })
   }
-  handleInput = e => {
-    this.setState({
-      inputValue: e.target.value
-    })
+  toggle = () => {
+    todo.finished = !todo.finished
   }
-  handleChecked = (id, e) => {
-    todoStore.todos.find(el => el.id === id).completed = e.target.checked
+  changeId = () => {
+    todo.id = _.uniqueId()
+  }
+  componentWillUnmount () {
+    console.log('clear')
+    localStorage.clear()
   }
   render () {
     return (
       <div>
-        <h1>Task List</h1>
-        <ul>
+        示例二 
+        <p>{`Id:  ${todo.id}`}</p>
+        <p>{`Title:  ${todo.title}`}</p>
+        <p>{`Finished:  ${todo.finished}`}</p>
+        <button onClick={this.toggle}>toggle</button>
+        <button onClick={this.changeId}>change Id</button>
+        <p>
           {
-            todoStore.todos.map(el => <li key={el.id}><input type='checkbox' onChange={this.handleChecked.bind(this, el.id)} />{el.task}</li>)
+            localStorage.getItem('todo')
           }
-        </ul>
-        <h2>New Task:</h2>
-        <input id='task-input' onChange={this.handleInput} value={this.state.inputValue} />
-        <h2>Progress:</h2>
-        {todoStore.report}
+        </p>
       </div>
     )
   }
-}
+} 

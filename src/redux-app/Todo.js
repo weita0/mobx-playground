@@ -7,10 +7,17 @@ export default class Todo extends React.Component {
   render () {
     const { title, finished, id } = this.props
     return (
-      <div>
-        <input type='checkbox' checked={finished} onChange={this.toggleTodo.bind(this, id)} />
-        <span style={{textDecoration: finished ? 'line-through' : 'none'}}>{title}</span>
-      </div>
+      <li className={finished ? 'finished' : ''}>
+        <div className='view'>
+          <input
+            type='checkbox'
+            className='toggle'
+            checked={finished}
+            onChange={this.toggleTodo.bind(this, id)}
+          />
+          <label>{title}</label>
+        </div>
+      </li>
     )
   }
 }

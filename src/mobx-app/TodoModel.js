@@ -1,4 +1,4 @@
-import {observable} from 'mobx'
+import {observable, computed} from 'mobx'
 
 export default class TodoModel {
   id
@@ -14,4 +14,5 @@ export default class TodoModel {
   toggle () {
     this.finished = !this.finished
   }
+  
 }

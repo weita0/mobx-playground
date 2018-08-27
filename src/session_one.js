@@ -1,72 +1,77 @@
 import React from 'react'
 import TodoStore from './todoStore'
 import {observer} from 'mobx-react'
-import { autorun } from 'mobx'
-import { __esModule } from '../node_modules/react-router-dom/Redirect';
+import { autorun, observable, computed } from 'mobx'
 
-export const todoStore = new TodoStore()
+class Store {
+  @observable todos = []
+
+  unrelated = []
+  // todos = [] 
+  addTodo (title) {
+    this.todos.push({
+      id: _.uniqueId(),
+      title,
+      finished: false
+    })
+  }
+
+  removeTodo (id) {
+    this.todos = this.todos.filter(el => el.id !== id)
+  }
+
+  @computed get leftTask () {
+    return this.todos.filter(el => !el.finished).length
+  }
+  
+  @computed get howManyUnrelated () {
+    return this.unrelated.length
+  }
+
+  @computed get total () {
+    return this.unrelated.length + this.todos.length
+  }
+}
+
+const store = new Store()
 
 @observer
 export default class SessionOne extends React.Component {
-  state = {
-    inputValue: ''
-  }
   componentDidMount () {
-    autorun(() => {
-      console.log(todoStore.progress)
-    })
-    document.getElementById('task-input').addEventListener('keydown', e => {
-      if (e.which === 13) { // enter
-        if (this.state.inputValue) {
-          todoStore.addTodo(this.state.inputValue)
-          // this.props.todoStore.addTodo(this.state.inputValue)
-          this.setState({
-            inputValue: ''
-          })
-        }
-      }
-    })
+    setTimeout(() => {
+      store.addTodo('play one song')
+      store.unrelated.push(0)
+    }, 1000)
+
+    setTimeout(() => {
+      store.addTodo('make a coffee')
+      store.unrelated.push(1)
+    }, 2000)
+    
   }
-  handleInput = e => {
-    this.setState({
-      inputValue: e.target.value
-    })
-  }
-  handleChecked = (id, e) => {
-    // console.log(id, e.target.checked)
-    todoStore.todos.find(el => el.id === id).finished = e.target.checked
-    // this.props.todoStore.toggleFinished(id, e.target.checked)
-  }
-  clearFinished = () => {
-    todoStore.todos = todoStore.todos.filter(todo => !todo.finished)
-  }
-  addUnrelated = () => {
-    console.log('hello')
-    todoStore.unrelatedArray.push(_.uniqueId())
+  del (id, e) {
+    store.removeTodo(id)
   }
   render () {
-    // const todoStore = this.props.todoStore
     return (
       <div>
-        <p>示例一</p>
-        <h1>Task List</h1>
-        <ul>
-          {
-            todoStore.todos.map(el =>
-              <li key={el.id}>
-                <input type='checkbox' onChange={this.handleChecked.bind(this, el.id)} />
-                <span style={{textDecoration: el.finished ? 'line-through' : 'none'}}>{el.title}</span>
-              </li>
-            )
-          }
-        </ul>
-        {todoStore.todos.length !== 0 && <button onClick={this.clearFinished}>clear the finished</button>}
-        <button onClick={this.addUnrelated}>add an unrelated</button>
-        <h2>New Task:</h2>
-        <input id='task-input' onChange={this.handleInput} value={this.state.inputValue} />
-        <h2>Progress:</h2>
-        <p>{todoStore.progress}</p>
-        <p>{`how many unrelated: ${todoStore.howManyUnrelated}`}</p>
+        示例一
+        <div>
+          <ul>
+            {
+              store.todos.map(el =>
+                <li key={el.id} onDoubleClick={this.del.bind(this, el.id)}>{el.title}</li>
+              ) 
+            }
+          </ul>
+          <p>{`${store.leftTask} left`}</p>
+          <p>
+            {`${store.howManyUnrelated} left`}
+          </p>
+          <p>
+            {`${store.total} left`}
+          </p>
+        </div>
       </div>
     )
   }

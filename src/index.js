@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom
 import Content from './content'
 import SessionOne from './session_one'
 import SessionTwo from './session_two'
-import SessionThree from './session_three'
 import Timer from './timer'
 import TodoStore from './todoStore'
 import './index.css'
@@ -29,9 +28,6 @@ const Navigator = () => (
           <Link to='/session2'>示例二</Link>
         </li>
         <li>
-          <Link to='/session3'>示例三</Link>
-        </li>
-        <li>
           <Link to='/reduxapp'>Redux Version</Link>
         </li>
         <li>
@@ -43,7 +39,6 @@ const Navigator = () => (
         <Route exact path='/' component={Content} />
         <Route path='/session1' component={() => <SessionOne todoStore={new TodoStore()} />} />
         <Route path='/session2' component={SessionTwo} />
-        <Route path='/session3' component={SessionThree} />
         <Route path='/timer' component={Timer} />
         <Route path='/test' component={Test} />
         <Route path='/reduxapp' component={ReduxApp} />
