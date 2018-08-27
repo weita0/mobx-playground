@@ -24,7 +24,7 @@ export default class SessionTwo extends React.Component {
       todo.title = 'go to sleep'
     }, 3000)
     autorun(() => {
-      localStorage.setItem('todo', JSON.stringify(toJS(todo)))
+      localStorage.setItem('todo', JSON.stringify(todo))
     })
   }
   toggle = () => {
@@ -32,10 +32,6 @@ export default class SessionTwo extends React.Component {
   }
   changeId = () => {
     todo.id = _.uniqueId()
-  }
-  componentWillUnmount () {
-    console.log('clear')
-    localStorage.clear()
   }
   render () {
     return (
@@ -46,11 +42,11 @@ export default class SessionTwo extends React.Component {
         <p>{`Finished:  ${todo.finished}`}</p>
         <button onClick={this.toggle}>toggle</button>
         <button onClick={this.changeId}>change Id</button>
-        <p>
+        {/* <p>
           {
             localStorage.getItem('todo')
           }
-        </p>
+        </p> */}
       </div>
     )
   }

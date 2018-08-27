@@ -1,6 +1,17 @@
-# MobX 分享
+# Unhappy with Redux? Try Mobx
 
 ---
+
+## Why state management is necessary
+
+<img src="https://pic1.zhimg.com/v2-d321bbb8039a8a24fb58e793ef226d94_b.jpg" width="500px" />
+
+## Pain points of using Redux
+
+1. name a bunch of actions
+2. what actions receive and what action.payload gives
+3. complicated data transforming
+4. a lot of biolerplate
 
 ## [Preparation](#preparation)
 
@@ -124,8 +135,36 @@ class TodoList {
 
 比如打印log，重绘UI，持久化等操作
 
-## 注意事项
+### @action
 
-### Array.isArray(observable([1, 2, 3])) === false
+Actions are all the things that alter the state.
 
-toJS() 或 slice() 转成普通数组
+建议对任何修改observable或具有副作用的函数使用，为啥？
+
+和装饰的函数具有同样签名，但是额外提供了 **transaction**、**untracked**、**allowStateChanges** 方法
+
+动作会分批处理变化并且只在最外层的动作完成后通知computed values 和 reaction
+
+结合Devtools，能提供非常有用的调试信息
+
+## Compare with Redux
+
+1. 编程思想上，一个是FP思维，一个是OOP思维
+2. Redux可以回溯，MobX由于数据只有一份，因此无法回溯
+3. Simplicity & Complexity
+4. 内存开销大和小
+5. opinioned & unipinioned
+
+## Summary
+
+People often use MobX as alternative for Redux.
+
+But please note that MobX is just a library to solve a technical problem
+
+and not an architecture or even state container in itself.
+
+In that sense the above examples are contrived and it is recommended to use proper
+
+engineering practices like encapsulating logic in methods,
+
+organize them in stores or controllers etc.

@@ -1,10 +1,11 @@
 import React from 'react'
 import TodoStore from './todoStore'
 import {observer} from 'mobx-react'
-import { autorun, observable, computed } from 'mobx'
+import { autorun, observable, computed, action } from 'mobx'
 
 class Store {
   @observable todos = []
+  // todos = []
 
   unrelated = []
   // todos = [] 
@@ -24,13 +25,13 @@ class Store {
     return this.todos.filter(el => !el.finished).length
   }
   
-  @computed get howManyUnrelated () {
+  get howManyUnrelated () {
     return this.unrelated.length
   }
 
-  @computed get total () {
-    return this.unrelated.length + this.todos.length
-  }
+  // @computed get total () {
+  //   return this.unrelated.length + this.todos.length
+  // }
 }
 
 const store = new Store()
@@ -68,9 +69,9 @@ export default class SessionOne extends React.Component {
           <p>
             {`${store.howManyUnrelated} left`}
           </p>
-          <p>
+          {/* <p>
             {`${store.total} left`}
-          </p>
+          </p> */}
         </div>
       </div>
     )
